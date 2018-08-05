@@ -1,26 +1,34 @@
-/**
- * @class ExampleComponent
- */
+// @flow
+/* eslint-disable no-use-before-define */
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import toPlainObject from 'lodash/toPlainObject'
+import { serializeElement, renderElement } from './serialize'
+import { diff } from 'deep-diff'
+import set from 'lodash/set'
+import get from 'lodash/get'
 
-import styles from './styles.css'
+// diff()
 
-export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
-  }
+type Props = {
+  left: React.Node,
+  right: React.Node,
+  renderChange: any => React.Node,
+}
 
+class ReactVisualDiff extends Component<Props> {
   render() {
-    const {
-      text
-    } = this.props
+    const left = serializeElement(this.props.left)
+    const right = serializeElement(this.props.right)
+    const changes = diff(left, right)
 
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
+    changes.reduce()
   }
+}
+
+
+
+export {
+  serializeElement,
+  renderElement
 }

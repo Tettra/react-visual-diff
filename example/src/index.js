@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
-import { serializeElement, renderElement } from 'react-deep-diff'
+import ReactDiff from 'react-deep-diff'
+import { diff } from 'deep-diff'
 
 const Wrapper = styled.div`
   background: black;
@@ -17,12 +18,21 @@ const Title = styled.h1`
 
 const el = <Wrapper>3213
   <Title>What a title yo</Title>
-  <span className="dwdwq">Hello</span>
+  <span className="dwdwq">
+    Hello
+    <span>Wat</span>
+  </span>
 </Wrapper>
 
-const obj = serializeElement(el)
+const el2 = <Wrapper>3213
+  <Title>What a boing</Title>
+  <span className="dwdwq">
+    Hello
+    <span>Boing</span>
+  </span>
+  <div>
+    <h1>Another thing</h1>
+  </div>
+</Wrapper>
 
-console.log('serialized el1', obj)
-console.log('render el1', renderElement(obj))
-
-ReactDOM.render(renderElement(obj), document.getElementById('root'))
+ReactDOM.render(<ReactDiff left={el} right={el2} />, document.getElementById('root'))

@@ -5,6 +5,8 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+    "diff": "^3.5.0",
+    "fast-diff": "^1.1.2",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-deep-diff": "link:..",

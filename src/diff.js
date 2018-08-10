@@ -15,17 +15,13 @@ import type {
   TextDiff
 } from './types'
 
-const _renderAdded = ({children, key}) => {
-  return <span style={{border: '1px solid green'}} key={key}>{children}</span>
-}
-
-const _renderRemoved = ({children, key}) => {
-  return <span style={{border: '1px solid red'}} key={key}>{children}</span>
+const _renderChangeElement = ({type, children, key}) => {
+  return <span style={type === 'added' ? {border: '1px solid green'} : {border: '1px solid red'}} key={key}>{children}</span>
 }
 
 const _omitProp = val => isFunction(val)
 
-export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, omitProp = _omitProp) => {
+export default (renderChangeElement = _renderChangeElement, omitProp = _omitProp) => {
   const serializeChild = (child: React$Node): SerializedChild => {
     if (Array.isArray(child)) {
       return serializeChildren(child)
@@ -46,15 +42,17 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, omit
 
   const serializeElement = (element: React$Element<any>): SerializedElement => {
     let el = element
-    if (el != null) {
-      while (el !== null && typeof el.type === 'function') {
-        const newEl = new el.type(el.props)
-        if (newEl.render != null) {
-          el = newEl.render()
-        } else {
-          el = newEl
-          break;
-        }
+
+    while (el !== null && typeof el.type === 'function') {
+      if (el.type.name === 'Portal') {
+        el = null;
+        break;
+      }
+      const newEl = new el.type(el.props)
+      if (newEl.render != null) {
+        el = newEl.render()
+      } else {
+        el = newEl
       }
     }
 
@@ -69,18 +67,17 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, omit
       props: {
         //...restProps,
         ...omitBy(restProps, omitProp),
-        children: serializeChildren(children),
+        children: serializeChildren(children)
       }
     }
   }
 
-
   const renderTextDiff = (textDiff: TextDiff): React$Node => textDiff.map(
     ({ removed, added, value }, index) => {
       if (removed === true) {
-        return renderRemoved({children: value, key: `removed-${index}`})
+        return renderChangeElement({type: 'removed', children: value, key: `removed-${index}`})
       } else if (added === true) {
-        return renderAdded({children: value, key: `added-${index}` })
+        return renderChangeElement({type: 'added', children: value, key: `added-${index}` })
       }
 
       if (value.type != null && value.props != null) {
@@ -100,18 +97,18 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, omit
   const renderChange = (change: Change): React$Node => {
     switch(change.kind) {
       case 'N':
-        return renderAdded({children: renderChild(change.rhs) })
+        return renderChangeElement({type: 'added', children: renderChild(change.rhs) })
       case 'E':
         if (isString(change.lhs) && isString(change.rhs)) {
           return renderTextDiff(jsdiff.diffWords(change.lhs, change.rhs))
         }
 
         return [
-          renderRemoved({children: renderChild(change.lhs) }),
-          renderAdded({children: renderChild(change.rhs) }),
+          renderChangeElement({type: 'removed', children: renderChild(change.lhs) }),
+          renderChangeElement({type: 'added', children: renderChild(change.rhs) }),
         ]
       case 'D':
-        return renderRemoved({children: renderChild(change.lhs) })
+        return renderChangeElement({type: 'removed', children: renderChild(change.lhs) })
       default:
         throw new Error('change not handled')
     }
@@ -153,12 +150,17 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, omit
   const renderElement = (serializedElement: SerializedElement): React$Element<any> => {
     const { type, props: { children, ...restProps } } = serializedElement
 
+    const newProps = {
+      ...restProps
+    }
+
+    if (children != null) {
+      newProps.children = renderChildren(children)
+    }
+
     return React.createElement(
       type,
-      {
-        ...restProps,
-        children: renderChildren(children)
-      }
+      newProps
     )
   }
 

@@ -21,30 +21,35 @@ const Title = styled.h1`
   border: 1px solid #ccc;
 `
 
-// const el = <Wrapper>3213
-//   <Title>What a title yo</Title>
-//   <span className="dwdwq">
-//     Hello
-//     <span>Wat</span>
-//   </span>
-// </Wrapper>
-// 
-// const el2 = <Wrapper>3213
-//   <Title>What a boing</Title>
-//   <span className="dwdwq">
-//     Hello
-//     <span>Boing</span>
-//   </span>
-//   <div>
-//     <h1>Another thing</h1>
-//   </div>
-// </Wrapper>
+const el = <Wrapper>3213
+  <Title>What a title yo</Title>
+  <span className="dwdwq">
+    Hello
+    <span>Wat</span>
+  </span>
+  <span className="dwdwq">
+    Goodbye
+    <span>Boing</span>
+  </span>
+  <hr />
+</Wrapper>
+
+const el2 = <Wrapper>3224
+  <Title>What a boing</Title>
+  <div>
+    <h1>Another thing</h1>
+  </div>
+  <span className="dwdwq">
+    Hello
+    <span>Boing</span>
+  </span>
+</Wrapper>
 
 // ReactDOM.render(<ReactDiff left={el} right={el2} />, document.getElementById('root'))
 
-const el1 = <Editor content={content1} />
-const el2 = <Editor content={content2} />
-
+// const el1 = <Editor content={content1} />
+// const el2 = <Editor content={content2} />
+// 
 const ReactDiff = createDiffComponent()
 
-ReactDOM.render(<ReactDiff left={el1} right={el2} />, document.getElementById('root'))
+ReactDOM.render(<ReactDiff left={el} right={el2} />, document.getElementById('root'))

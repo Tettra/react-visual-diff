@@ -2,7 +2,6 @@
 /* eslint-disable no-use-before-define */
 
 import React from 'react'
-import toPlainObject from 'lodash/toPlainObject'
 import isString from 'lodash/isString'
 import omitBy from 'lodash/omitBy'
 import isFunction from 'lodash/isFunction'
@@ -13,9 +12,8 @@ import type {
   SerializedChild,
   Change,
   SerializedChildren,
-  TextDiff,
+  TextDiff
 } from './types'
-
 
 const _renderAdded = ({children, key}) => {
   return <span style={{border: '1px solid green'}} key={key}>{children}</span>
@@ -108,10 +106,10 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, omit
           return renderTextDiff(jsdiff.diffWords(change.lhs, change.rhs))
         }
 
-        return <Fragment>
-          {renderRemoved({children: renderChild(change.lhs) })}
-          {renderAdded({children: renderChild(change.rhs) })}
-        </Fragment>
+        return [
+          renderRemoved({children: renderChild(change.lhs) }),
+          renderAdded({children: renderChild(change.rhs) }),
+        ]
       case 'D':
         return renderRemoved({children: renderChild(change.lhs) })
       default:

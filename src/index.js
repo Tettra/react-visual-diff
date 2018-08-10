@@ -14,8 +14,8 @@ type Props = {
   renderChange: any => React$Element<any>,
 }
 
-export default (renderAdd, renderRemove, filterProps) => {
-  const { serializeElement, renderElement } = createDiffer(renderAdd, renderRemove)
+export default (renderAdd, renderRemove, omitProp) => {
+  const { serializeElement, renderElement } = createDiffer(renderAdd, renderRemove, omitProp)
 
   return class ReactVisualDiff extends Component<Props> {
     render() {
@@ -29,7 +29,8 @@ export default (renderAdd, renderRemove, filterProps) => {
         return set(acc, val.path, val)
       }, left)
 
-      return renderElement(mixed)
+      const el = renderElement(mixed)
+      return el
     }
   }
 }

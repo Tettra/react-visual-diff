@@ -4,6 +4,8 @@
 import React from 'react'
 import toPlainObject from 'lodash/toPlainObject'
 import isString from 'lodash/isString'
+import omitBy from 'lodash/omitBy'
+import isFunction from 'lodash/isFunction'
 import jsdiff from 'diff'
 import type {
   React$Node,
@@ -15,10 +17,17 @@ import type {
 } from './types'
 
 
-const _renderAdded = ({children}) => <span style={{border: '1px solid green'}}>{children}</span>
-const _renderRemoved = ({children}) => <span style={{border: '1px solid red'}}>{children}</span>
+const _renderAdded = ({children, key}) => {
+  return <span style={{border: '1px solid green'}} key={key}>{children}</span>
+}
 
-export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, filterProps) => {
+const _renderRemoved = ({children, key}) => {
+  return <span style={{border: '1px solid red'}} key={key}>{children}</span>
+}
+
+const _omitProp = val => isFunction(val)
+
+export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, omitProp = _omitProp) => {
   const serializeChild = (child: React$Node): SerializedChild => {
     if (Array.isArray(child)) {
       return serializeChildren(child)
@@ -31,7 +40,7 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, filt
 
   const serializeChildren = (children: React$Node): SerializedChildren => {
     if (Array.isArray(children)) {
-      return children.map(serializeChild)
+      return children.filter(child => child != null).map(serializeChild)
     } else {
       return serializeChild(children)
     }
@@ -60,7 +69,8 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, filt
     return {
       type,
       props: {
-        ...restProps,
+        //...restProps,
+        ...omitBy(restProps, omitProp),
         children: serializeChildren(children),
       }
     }
@@ -68,12 +78,23 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, filt
 
 
   const renderTextDiff = (textDiff: TextDiff): React$Node => textDiff.map(
-    ({ removed, added, value }) => {
+    ({ removed, added, value }, index) => {
       if (removed === true) {
-        return renderRemoved({children: value})
+        return renderRemoved({children: value, key: `removed-${index}`})
       } else if (added === true) {
-        return renderAdded({children: value })
+        return renderAdded({children: value, key: `added-${index}` })
       }
+
+      if (value.type != null && value.props != null) {
+        return React.cloneElement(
+          value.type,
+          {
+            ...omitBy(value.props, omitProp),
+            key: `same-${index}`
+          }
+        )
+      }
+
       return value
     }
   )
@@ -113,13 +134,13 @@ export default (renderAdded = _renderAdded, renderRemoved = _renderRemoved, filt
 
   const renderChildren = (children: SerializedChildren): React$Node => {
     if (Array.isArray(children)) {
-      return children.map((child, index) => {
+      return children.filter(child => child != null).map((child, index) => {
         if (child != null && child.props != null) {
           // hack to ensure all elements have keys :/
           return {
             ...child,
             props: {
-              ...child.props,
+              ...omitBy(child.props, omitProp),
               key: `key-fix-${index}`
             }
           }

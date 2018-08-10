@@ -7,10 +7,12 @@
   "dependencies": {
     "diff": "^3.5.0",
     "fast-diff": "^1.1.2",
+    "medium-draft": "^0.5.6",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-deep-diff": "link:..",
     "react-dom": "^16.2.0",
+    "react-json-renderer": "^0.6.0",
     "react-scripts": "^1.1.1",
     "styled-components": "^3.4.0"
   },

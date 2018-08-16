@@ -2,7 +2,7 @@
 
 > A React Component that renders the structural differences of two React Elements
 
-[![NPM](https://img.shields.io/npm/v/react-deep-diff.svg)](https://www.npmjs.com/package/react-deep-diff) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-visual-diff.svg)](https://www.npmjs.com/package/react-visual-diff) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 

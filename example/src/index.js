@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
-import createDiffComponent from 'react-deep-diff'
+import VisualDiff from 'react-deep-diff'
 import { diff } from 'deep-diff'
 import './index.css'
 import Editor from './Editor'
@@ -45,11 +45,10 @@ const el2 = <Wrapper>3224
   </span>
 </Wrapper>
 
-// ReactDOM.render(<ReactDiff left={el} right={el2} />, document.getElementById('root'))
+// ReactDOM.render(<VisualDiff left={el} right={el2} />, document.getElementById('root'))
 
 // const el1 = <Editor content={content1} />
 // const el2 = <Editor content={content2} />
 // 
-const ReactDiff = createDiffComponent()
 
-ReactDOM.render(<ReactDiff left={el} right={el2} />, document.getElementById('root'))
+ReactDOM.render(<VisualDiff left={el} right={el2} />, document.getElementById('root'))

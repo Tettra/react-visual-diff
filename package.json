@@ -1,6 +1,6 @@
 {
   "name": "react-visual-diff",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A react component that can render a diff of two react components",
   "author": "juliankrispel",
   "license": "MIT",
@@ -19,12 +19,11 @@
   },
   "dependencies": {
     "deep-diff": "^1.0.1",
-    "flow-bin": "^0.77.0",
-    "lodash": "^4.17.10",
-    "react-component-tree": "^2.0.0-beta.14",
-    "react-test-renderer": "^16.4.2"
+    "diff": "^3.5.0",
+    "lodash": "^4.17.10"
   },
   "peerDependencies": {
+    "flow-bin": "^0.77.0",
     "prop-types": "^15.5.4",
     "react": "^15.0.0 || ^16.0.0",
     "react-dom": "^15.0.0 || ^16.0.0"
@@ -51,6 +50,7 @@
     "react-scripts": "^1.1.1",
     "rollup": "^0.64.1",
     "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-cleanup": "^3.0.0",
     "rollup-plugin-commonjs": "^9.1.4",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-peer-deps-external": "^2.0.0",

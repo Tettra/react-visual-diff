@@ -4,6 +4,12 @@
 
 [![NPM](https://img.shields.io/npm/v/react-visual-diff.svg)](https://www.npmjs.com/package/react-visual-diff) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
+This module provides a way of visually rendering differences between React Elements. It was originally developed for [tettra](http://tettra.co/) to visualize differences between two documents. It uses the [`deep-diff` module](https://www.npmjs.com/package/deep-diff) under the hood.
+
+##### Limitations:
+- All function props, such as onClick handlers are discarded when rendering a diff (However, you can make the diff interactive via the `renderChange` prop)
+- We're diffing the structure of two React Elements. react-visual-diff is not a visual regression tool.
+
 ## Install
 
 ```bash
@@ -68,7 +74,14 @@ This would omit rendering any differences whose paths include the style prop.
 | `renderChange` | `Component<{ type: 'added' | 'removed', children: React$Children }>` | optional | A react component (can be just a function) that takes two props, `type` is the type of change (`"added"` or `"removed"`), `children` is just the content of the change |
 | `omitChange` | `(change: Object) => boolean` | optional | a method to let you filter the changes applied to the diff. Changes are objects defined by the [`deep-diff`](https://www.npmjs.com/package/deep-diff) module. |
 
+### Roadmap
+
+- An example with draft js documents
+- Examples with various open source components
+- An example with interaction
+- Reduce file size (currently it's pretty big)
+- react-native support
 
 ## License
 
-MIT © [juliankrispel](https://github.com/juliankrispel)
+MIT © [Tettra](https://github.com/tettra)

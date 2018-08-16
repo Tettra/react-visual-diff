@@ -31,6 +31,8 @@ const renderChange = ({ type, children }) => {
   >{children}</span>;
 };
 
+const negate = func => val => func(val) === false
+
 export default class ReactVisualDiff extends Component {
   static defaultProps = {
     renderChange,
@@ -42,7 +44,7 @@ export default class ReactVisualDiff extends Component {
     const right = serializeElement(this.props.right)
 
     const changes = diff({...left}, {...right})
-    .filter(this.props.omitChange)
+    .filter(negate(this.props.omitChange))
     .map(change => {
       const { path } = change
       const lastItem = path[path.length - 1]

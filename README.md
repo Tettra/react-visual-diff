@@ -49,9 +49,15 @@ The `renderChange` prop lets you do this:
   />
 ```
 
-## Omitting changes
+## Diffing only certain props
 
-Basically, when two react elements are compared, they're first being serialized to objects and then diffed with the [`deep-diff`](https://www.npmjs.com/package/deep-diff) module. With the `omitChange` prop you can filter out differences that you don't want to render.
+Basically, when two react elements are compared, they're first being serialized to objects and then diffed. By default the following props are diffed:
+
+```
+const diffProps = ['children', 'type', 'className', 'style']
+```
+
+If you'd like to restrict this to a different set, simply set the `diffProps` prop
 
 For example:
 
@@ -59,11 +65,11 @@ For example:
 <VisualDiff
   left={<span>This is the left side</span>}
   right={<span>This is the left side</span>}
-  omitChange={(change) => change.path.includes('style')}
+  diffProps={['children']}
   />
 ```
 
-This would omit rendering any differences whose paths include the style prop.
+This would only render differences of the children prop.
 
 ### `<VisualDiff>` Props:
 
@@ -72,7 +78,7 @@ This would omit rendering any differences whose paths include the style prop.
 | `left` | `React.Element` | required | Pass React.Element or just jsx `left={<MyFancyComponent>}` |
 | `right` | `React.Element` | required | Pass React.Element or just jsx `right={<MyOtherFancyComponent>}` |
 | `renderChange` | `Component<{ type: 'added' | 'removed', children: React$Children }>` | optional | A react component (can be just a function) that takes two props, `type` is the type of change (`"added"` or `"removed"`), `children` is just the content of the change |
-| `omitChange` | `(change: Object) => boolean` | optional | a method to let you filter the changes applied to the diff. Changes are objects defined by the [`deep-diff`](https://www.npmjs.com/package/deep-diff) module. |
+| `diffProps` | `Array<string>` | optional | An array of prop names that will be diffed. defaults to `['children', 'type', 'className', 'style']` |
 
 ### Roadmap
 

@@ -22,7 +22,7 @@ const Title = styled.h1`
 `
 
 const el = <Wrapper>3213
-  <Title>What a title yo</Title>
+  <Title data-editor-key="dqw">What a title yo</Title>
   <span className="dwdwq">
     Hello
     <span>Wat</span>
@@ -35,7 +35,7 @@ const el = <Wrapper>3213
 </Wrapper>
 
 const el2 = <Wrapper>3224
-  <Title>What a boing</Title>
+  <Title data-editor-key="h30k">What a boing</Title>
   <div>
     <h1>Another thing</h1>
   </div>

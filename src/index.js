@@ -5,6 +5,7 @@ import { serializeElement, renderElement } from './diff'
 import DeepDiff from 'deep-diff'
 import set from 'lodash/set'
 import get from 'lodash/get'
+import last from 'lodash/last'
 
 const { diff } = DeepDiff
 
@@ -33,10 +34,23 @@ const renderChange = ({ type, children }) => {
 
 const negate = func => val => func(val) === false
 
+const diffProps = ['children', 'type', 'className', 'style']
+
 export default class ReactVisualDiff extends Component {
   static defaultProps = {
     renderChange,
-    omitChange: () => false
+    diffProps,
+  }
+
+  omitChange = (change) => {
+    let lastProp = last(change.path)
+
+    // if the last prop is a number, get the prop before
+    if (typeof lastProp === 'number') {
+      lastProp = change.path.slice(-2, -1)
+    }
+
+    return !this.props.diffProps.includes(lastProp)
   }
 
   render() {
@@ -44,7 +58,7 @@ export default class ReactVisualDiff extends Component {
     const right = serializeElement(this.props.right)
 
     const changes = diff({...left}, {...right})
-    .filter(negate(this.props.omitChange))
+    .filter(negate(this.omitChange))
     .map(change => {
       const { path } = change
       const lastItem = path[path.length - 1]

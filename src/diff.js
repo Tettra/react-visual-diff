@@ -3,7 +3,6 @@ import React from 'react'
 import isString from 'lodash/isString'
 import omitBy from 'lodash/omitBy'
 import isFunction from 'lodash/isFunction'
-import jsdiff from 'diff'
 import type {
   React$Node,
   SerializedElement,
@@ -12,6 +11,7 @@ import type {
   SerializedChildren,
   TextDiff
 } from './types'
+const jsdiff = require('diff');
 
 const omitProp = val => isFunction(val)
 

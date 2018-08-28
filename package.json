@@ -1,6 +1,6 @@
 {
   "name": "react-visual-diff",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A react component that can render a diff of two react components",
   "author": "juliankrispel",
   "license": "MIT",

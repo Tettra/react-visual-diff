@@ -57,7 +57,7 @@ export default class ReactVisualDiff extends Component {
     const left = serializeElement(this.props.left)
     const right = serializeElement(this.props.right)
 
-    const changes = diff({...left}, {...right})
+    const changes = (diff({...left}, {...right}) || [])
     .filter(negate(this.omitChange))
     .map(change => {
       const { path } = change

@@ -49,7 +49,7 @@ export const serializeElement = (element) => {
     }
   }
 
-  if (el == null) {
+  if (el == null || el.props == null) {
     return el
   }
 

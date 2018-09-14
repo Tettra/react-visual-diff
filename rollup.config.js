@@ -33,5 +33,5 @@ export default {
     commonjs(),
     cleanup()
   ],
-  external: ['lodash', 'diff', 'deep-diff', 'react']
+  external: ['lodash', 'diff', 'deep-diff', 'react', 'jsondiffpatch']
 }

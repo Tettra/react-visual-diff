@@ -1,10 +1,10 @@
 {
   "name": "react-visual-diff",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A react component that can render a diff of two react components",
   "author": "juliankrispel",
   "license": "MIT",
-  "repository": "juliankrispel/react-deep-diff",
+  "repository": "Tettra/react-visual-diff",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
@@ -18,8 +18,8 @@
     "deploy": "gh-pages -d example/build"
   },
   "dependencies": {
-    "deep-diff": "^1.0.1",
     "diff": "^3.5.0",
+    "jsondiffpatch": "^0.3.11",
     "lodash": "^4.17.10"
   },
   "peerDependencies": {

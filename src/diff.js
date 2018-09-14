@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React from 'react'
 import isString from 'lodash/isString'
-import omitBy from 'lodash/omitBy'
+import pick from 'lodash/pick'
 import isFunction from 'lodash/isFunction'
 import type {
   React$Node,
@@ -11,9 +11,10 @@ import type {
   SerializedChildren,
   TextDiff
 } from './types'
-const jsdiff = require('diff');
 
-const omitProp = val => isFunction(val)
+const allowedProps = ['children', 'type', 'className', 'style']
+
+var i = 0;
 
 const serializeChild = (child) => {
   if (Array.isArray(child)) {
@@ -58,7 +59,7 @@ export const serializeElement = (element) => {
   return {
     type,
     props: {
-      ...omitBy(restProps, omitProp),
+      ...pick(restProps, allowedProps),
       children: serializeChildren(children)
     }
   }
@@ -84,7 +85,7 @@ const renderTextDiff = (textDiff, renderChange) => textDiff.map(
       return React.cloneElement(
         value.type,
         {
-          ...omitBy(value.props, omitProp),
+          ...pick(value.props, allowedProps),
           key: `same-${index}`
         }
       )
@@ -94,32 +95,17 @@ const renderTextDiff = (textDiff, renderChange) => textDiff.map(
   }
 )
 
-const renderChangeNode = (change, renderChange) => {
-  switch(change.kind) {
-    case 'N':
-      return React.createElement(renderChange, {
-        type: 'added',
-        children: renderChild(change.rhs)
-      })
-    case 'E':
-      if (isString(change.lhs) && isString(change.rhs)) {
-        return renderTextDiff(jsdiff.diffWords(change.lhs, change.rhs), renderChange)
-      }
-
-      return [
-        React.createElement(renderChange, {type: 'removed', children: renderChild(change.lhs, renderChange) }),
-        React.createElement(renderChange, {type: 'added', children: renderChild(change.rhs, renderChange) }),
-      ]
-    case 'D':
-      return React.createElement(renderChange, {type: 'removed', children: renderChild(change.lhs, renderChange) })
-    default:
-      throw new Error('change not handled')
-  }
-}
-
 const renderChild = (child, renderChange) => {
-  if (child != null && child.kind != null) {
-    return renderChangeNode(child, renderChange)
+  if (child != null && (child.kind != null)) {
+    const { kind, ...children } = child
+    return React.createElement(
+      renderChange,
+      {
+        type: kind,
+        children: renderChild(children, renderChange),
+        key: `key-child-${i++}`
+      }
+    )
   } else if (child != null && child.props != null) {
     return renderElement(child, renderChange)
   } else if (Array.isArray(child)) {
@@ -137,7 +123,7 @@ const renderChildren = (children, renderChange) => {
         return {
           ...child,
           props: {
-            ...omitBy(child.props, omitProp),
+            ...pick(child.props, allowedProps),
             key: `key-fix-${index}`
           }
         }
@@ -148,8 +134,6 @@ const renderChildren = (children, renderChange) => {
     return renderChild(children, renderChange)
   }
 }
-
-var i = 0;
 
 export const renderElement = (serializedElement, renderChange) => {
   const { type, props: { children, ...restProps } } = serializedElement

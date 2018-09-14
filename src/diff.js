@@ -96,12 +96,12 @@ const renderTextDiff = (textDiff, renderChange) => textDiff.map(
 )
 
 const renderChild = (child, renderChange) => {
-  if (child != null && (child.kind != null)) {
-    const { kind, ...children } = child
+  if (child != null && (child.diffType != null)) {
+    const { diffType, ...children } = child
     return React.createElement(
       renderChange,
       {
-        type: kind,
+        type: diffType,
         children: renderChild(children, renderChange),
         key: `key-child-${i++}`
       }

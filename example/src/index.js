@@ -16,9 +16,9 @@ const Title = styled.h1`
 `
 
 const el = <div>
+  <div>Hello friend</div>
   <div>
     <h1>Headline 1</h1>
-    <h2><span>Headline</span> <span>3</span></h2>
   </div>
   <div>
     <h1><span>Headline 6</span> What</h1>
@@ -29,7 +29,6 @@ const el = <div>
 const el2 = <div>
   <div>
     <h1>Headline 1</h1>
-    <h2><span>Headline</span> <span>2</span></h2>
   </div>
   <div>
     <h1><span>What is going on</span>Headline 3</h1>

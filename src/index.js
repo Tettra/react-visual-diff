@@ -6,6 +6,7 @@ import set from 'lodash/set'
 import get from 'lodash/get'
 import omit from 'lodash/omit';
 import update from 'lodash/update';
+import flatten from 'lodash/flatten';
 import isObject from 'lodash/isObject';
 import last from 'lodash/last'
 import { create } from 'jsondiffpatch';
@@ -29,6 +30,7 @@ const differ = create({
         }
       })
     } else {
+      return ''
       return JSON.stringify(obj)
     }
   }
@@ -64,7 +66,7 @@ var i = 0;
 // [{ path: PathArray, type: 'added' | 'removed' | 'updated' }]
 
 const getChanges = (obj, _paths = [], path = []) => {
-  let paths = _paths;
+  let paths = _paths, value;
   const searchObj = path.length > 0 ? get(obj, path) : obj;
   i++
 
@@ -80,54 +82,78 @@ const getChanges = (obj, _paths = [], path = []) => {
       switch (searchObj[key].length) {
         case 1:
           // Item added
+          value = get(obj, newPath)[0]
           paths.push({
             path: transformMetaPath(newPath),
             type: 'added',
-            value: get(obj, newPath)[0]
+            value: isObject(value) ? value : { type: 'span', props: { children: value } }
           })
           break;
         case 2:
           // Item updated
-          paths.push({
-            path: transformMetaPath(newPath),
-            type: 'updated',
-            value: jsdiff.diffWords(...get(obj, newPath)).map(item => {
-              if (item.added === true) {
-                return {
-                  kind: 'added',
-                  type: 'span',
-                  props: {
-                    children: item.value
-                  }
+          value = get(obj, newPath)
+          if (value.every(item => typeof item === 'string')) {
+            paths.push({
+              path: transformMetaPath(newPath),
+              type: 'updated',
+              value: {
+                type: 'span',
+                props: {
+                  children: jsdiff.diffWords(...value).map(item => {
+                    if (item.added === true) {
+                      return {
+                        kind: 'added',
+                        type: 'span',
+                        props: {
+                          children: item.value
+                        }
+                      }
+                    } else if (item.removed === true) {
+                      return {
+                        kind: 'removed',
+                        type: 'span',
+                        props: {
+                          children: item.value
+                        }
+                      }
+                    } else {
+                      return item.value
+                    }
+                  })
                 }
-              } else if (item.removed === true) {
-                return {
-                  kind: 'removed',
-                  type: 'span',
-                  props: {
-                    children: item.value
-                  }
-                }
-              } else {
-                return item.value
               }
             })
-          })
+          } else {
+            paths = paths.concat(flatten(value).map((item, index) => {
+              item = Array.isArray(item) ? item[0] : item
+              console.log('item?', item)
+              return {
+                path: transformMetaPath(newPath).concat([index]),
+                type: index === 0 ? 'removed' : 'added',
+                value: item
+              }
+            }))
+          }
+          
           break;
         case 3:
           // this means that we've encountered a text diff
+          value = get(obj, newPath)[0]
           if (searchObj[key][2] === 2) {
             paths.push({
               path: transformMetaPath(newPath),
               type: 'updated',
-              value: get(obj, newPath)[0]
+              value: isObject(value) ? value : { type: 'span', props: { children: value } }
             })
           } else {
             // Item removed
+            if (Array.isArray(value)) {
+              value = value[0]
+            }
             paths.push({
               path: transformMetaPath(newPath),
               type: 'removed',
-              value: get(obj, newPath)[0]
+              value //isObject(value) ? value : { type: 'span', props: { children: value } }
             })
           }
           break;
@@ -157,7 +183,11 @@ const reduceChange = (acc, change) => {
         }
       }
     )
-  } else if(type === 'removed' && prev === 'children') {
+  } else if(type === 'removed' && prev === 'children' && Array.isArray(get(acc, path.slice(0, -1)))) {
+    // console.log('type', type)
+    // console.log('path', path)
+    // console.log('get(acc, path.slice(0, -1))', get(acc, path.slice(0, -1)))
+    // console.log('value', value)
     acc = update(
       acc,
       path.slice(0, -1),
@@ -190,13 +220,20 @@ export default class ReactVisualDiff extends Component {
   render() {
     const left = serializeElement(this.props.left)
     const right = serializeElement(this.props.right)
+    console.log('left', left)
+    console.log('right', right)
 
     const _changes = differ.diff(left, right)
     const changes = getChanges(_changes)
+    console.log('_changes', _changes)
+    console.log('changes', changes.map(change => ({ type: change.type, lastPath: change.path.slice(-1)[0], value: change.value })))
 
-    let merged = changes.reverse().filter(change => change.type !== 'removed').reduce(reduceChange, right)
+    let merged = changes.reverse().filter(change => change.type === 'added').reduce(reduceChange, right)
+    changes.reverse().filter(change => change.type === 'updated').reduce(reduceChange, right)
     merged = changes.reverse().filter(change => change.type === 'removed').reduce(reduceChange, merged)
 
+    console.log('mergedyo', merged)
+    // console.log('mergedyo', JSON.stringify(merged, null, 2))
     return renderElement(merged, this.props.renderChange)
   }
 }

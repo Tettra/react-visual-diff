@@ -98,7 +98,7 @@ export default class ReactVisualDiff extends Component {
   render() {
     const left = serializeElement(this.props.left)
     const right = serializeElement(this.props.right)
-    const changes = diffElement(left, right)
+    const changes = diffElement(left, right).reverse()
 
     let merged = changes
       .filter(change => change.diffType !== 'removed')

@@ -12,7 +12,7 @@ import type {
   TextDiff
 } from './types'
 
-const allowedProps = ['children', 'type', 'className', 'style']
+const allowedProps = ['target', 'height', 'width', 'id', 'src', 'children', 'type', 'className', 'style', 'href', 'alt', 'htmlFor']
 
 var i = 0;
 
@@ -27,8 +27,11 @@ const serializeChild = (child) => {
 }
 
 const serializeChildren = (children) => {
-  children = !Array.isArray(children) ? [children] : children
-  return children.filter(child => child != null).map(serializeChild)
+  if (children != null) {
+    children = !Array.isArray(children) ? [children] : children
+    return children.filter(child => child != null).map(serializeChild)
+  }
+  return children
 }
 
 export const serializeElement = (element) => {

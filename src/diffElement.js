@@ -1,5 +1,6 @@
 const stringify = (...args) => JSON.stringify(...args)
 const isString = obj => typeof obj === 'string'
+import isObject from 'lodash/isObject'
 
 const diffChildren = (left, right, changes, leftPath, rightPath) => {
   if (![left, right].every(Array.isArray)) {
@@ -38,7 +39,7 @@ const diffChildren = (left, right, changes, leftPath, rightPath) => {
   return changes
 }
 
-const makeElementString = (element) => stringify({
+const makeElementString = (element) => Array.isArray(element) ? stringify(element) : stringify({
   type: element.type,
   props: {
     ...element.props,

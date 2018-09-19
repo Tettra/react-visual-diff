@@ -27,11 +27,8 @@ const serializeChild = (child) => {
 }
 
 const serializeChildren = (children) => {
-  if (Array.isArray(children)) {
-    return children.filter(child => child != null).map(serializeChild)
-  } else {
-    return serializeChild(children)
-  }
+  children = !Array.isArray(children) ? [children] : children
+  return children.filter(child => child != null).map(serializeChild)
 }
 
 export const serializeElement = (element) => {

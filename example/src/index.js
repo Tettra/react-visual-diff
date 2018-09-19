@@ -27,11 +27,12 @@ const el = <div>
 </div>
 
 const el2 = <div>
+  <div>Goodbye friend</div>
   <div>
     <h1>Headline 1</h1>
   </div>
   <div>
-    <h1><span>What is going on</span>Headline 3</h1>
+    <h1><span>What is going on</span>What 3</h1>
     <h2>Headline 4</h2>
   </div>
 </div>

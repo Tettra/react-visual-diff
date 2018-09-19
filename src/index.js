@@ -70,7 +70,6 @@ const reduceChange = (acc, { path, diffType, value, left, right}) => {
     const [prevLast, last] = path.slice(-2)
     if (prevLast === 'children') {
       const children = get(acc, path.slice(0, -1))
-      console.log('hello children', children, value)
 
       return set(
         acc,

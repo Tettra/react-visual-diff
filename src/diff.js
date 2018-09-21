@@ -2,6 +2,7 @@
 import React from 'react'
 import isString from 'lodash/isString'
 import pick from 'lodash/pick'
+import flatten from 'lodash/flatten'
 import isFunction from 'lodash/isFunction'
 import type {
   React$Node,
@@ -29,7 +30,7 @@ const serializeChild = (child) => {
 const serializeChildren = (children) => {
   if (children != null) {
     children = !Array.isArray(children) ? [children] : children
-    return children.filter(child => child != null).map(serializeChild)
+    return flatten(children.filter(child => child != null)).map(serializeChild)
   }
   return children
 }

@@ -1,6 +1,6 @@
 {
   "name": "react-visual-diff",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "A react component that can render a diff of two react components",
   "author": "juliankrispel",
   "license": "MIT",
@@ -11,14 +11,15 @@
   "scripts": {
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
-    "build": "rollup -c",
-    "start": "rollup -c -w",
+    "build": "rollup -c -m",
+    "start": "rollup -c -w -m",
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build"
   },
   "dependencies": {
     "diff": "^3.5.0",
+    "flatted": "^1.0.2",
     "lodash": "^4.17.10"
   },
   "peerDependencies": {
@@ -27,7 +28,6 @@
     "react-dom": "^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
-    "flow-bin": "^0.77.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-plugin-external-helpers": "^6.22.0",
@@ -44,6 +44,7 @@
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
+    "flow-bin": "^0.77.0",
     "gh-pages": "^1.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

@@ -1,6 +1,8 @@
-const stringify = (...args) => JSON.stringify(...args)
 const isString = obj => typeof obj === 'string'
 import pick from 'lodash/pick'
+import CircularJSON from 'flatted/esm'
+
+const stringify = (obj) => CircularJSON.stringify(obj)
 
 const diffChildren = (left, right, changes, leftPath, rightPath) => {
   if (![left, right].every(Array.isArray)) {

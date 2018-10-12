@@ -1,7 +1,7 @@
 const isString = obj => typeof obj === 'string'
 import pick from 'lodash/pick'
 import isObject from 'lodash/isObject'
-import CircularJSON from 'flatted/esm'
+import CircularJSON from 'flatted/cjs'
 
 const stringify = (obj) => CircularJSON.stringify(obj)
 

@@ -1,8 +1,13 @@
 const isString = obj => typeof obj === 'string'
 import pick from 'lodash/pick'
+import isObject from 'lodash/isObject'
 import CircularJSON from 'flatted/esm'
 
 const stringify = (obj) => CircularJSON.stringify(obj)
+
+var toType = function(obj) {
+  return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+}
 
 const diffChildren = (left, right, changes, leftPath, rightPath) => {
   if (![left, right].every(Array.isArray)) {
@@ -34,8 +39,15 @@ const diffChildren = (left, right, changes, leftPath, rightPath) => {
     rightChanges = rightChanges.concat(Array(Math.abs(lengthDifference)).fill(null))
   }
 
+
   rightChanges.forEach((_, index) => {
-    change[rightChanges[index]] = diff(left[leftChanges[index]], right[rightChanges[index]], changes, leftPath.concat([leftChanges[index]]), rightPath.concat([rightChanges[index]]))
+    diff(
+      left[leftChanges[index]],
+      right[rightChanges[index]],
+      changes,
+      leftPath.concat([leftChanges[index]]),
+      rightPath.concat([rightChanges[index]])
+    )
   })
 
   return changes
@@ -47,28 +59,45 @@ const makeElementString = (element) => Array.isArray(element) ? stringify(elemen
   type: element.type,
   props: {
     ...pick(element.props, diffProps),
-    children: typeof element.props.children
+    children: toType(element.props.children)
   }
 })
 
 const diff = (left, right, changes = [], leftPath = [], rightPath = []) => {
+  // We use the last position of the leftPath instead here, to position it correctly.
+  const newLeftPath = rightPath.slice(0, -1).concat(leftPath.slice(-1))
+
   if ([left, right].every(Array.isArray)) {
     diffChildren(left, right, changes, leftPath, rightPath)
-  } else if (typeof left === 'object' && typeof right === 'object') {
+  } else if (isObject(left) && isObject(right)) {
     const leftString = makeElementString(left)
     const rightString = makeElementString(right)
 
     if (leftString !== rightString) {
-      if (left) changes.push({ path: leftPath, diffType: 'removed', value: left })
-      if (right) changes.push({ path: rightPath, diffType: 'added', value: right })
+      if (left) changes.push({
+        path: newLeftPath,
+        diffType: 'removed',
+        value: left
+      })
+      if (right) changes.push({
+        path: rightPath,
+        diffType: 'added',
+        value: right
+      })
     } else {
-      diffChildren(left.props.children, right.props.children, changes, leftPath.concat(['props', 'children']), rightPath.concat(['props', 'children']))
+      diffChildren(
+        left.props.children,
+        right.props.children,
+        changes,
+        leftPath.concat(['props', 'children']),
+        rightPath.concat(['props', 'children'])
+      )
     }
   } else if (left !== right) {
     if ([left, right].every(isString)) {
       changes.push({ path: rightPath, diffType: 'updated', left, right })
     } else {
-      if (left) changes.push({ path: leftPath, diffType: 'removed', value: left })
+      if (left) changes.push({ path: newLeftPath, diffType: 'removed', value: left })
       if (right) changes.push({ path: rightPath, diffType: 'added', value: right })
     }
   }

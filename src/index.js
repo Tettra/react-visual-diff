@@ -69,7 +69,7 @@ const reduceChange = (acc, { path, diffType, value, left, right}) => {
   } else if (diffType === 'removed') {
     const [prevLast, last] = path.slice(-2)
     if (prevLast === 'children') {
-      const children = get(acc, path.slice(0, -1))
+      const children = get(acc, path.slice(0, -1)) || []
 
       return set(
         acc,
@@ -89,6 +89,8 @@ const reduceChange = (acc, { path, diffType, value, left, right}) => {
   return acc
 }
 
+const filterNumbers = arr => arr.filter(item => typeof item === 'number')
+
 export default class ReactVisualDiff extends Component {
   static defaultProps = {
     renderChange,
@@ -97,15 +99,23 @@ export default class ReactVisualDiff extends Component {
   render() {
     const left = serializeElement(this.props.left)
     const right = serializeElement(this.props.right)
-    const changes = diffElement(left, right).reverse()
+    const changes = diffElement(left, right)
+    .sort((changeA, changeB) => {
+      const pathA = filterNumbers(changeA.path)
+      const pathB = filterNumbers(changeB.path)
+      for (var i = 0; i < pathA.length; i++) {
+        if (pathA[i] > pathB[i]) {
+          return -1;
+        } else if (pathA[i] < pathB[i]){
+          return 1;
+        }
+      }
+
+      return 0;
+    })
 
     let merged = changes
-      .filter(change => change.diffType !== 'removed')
       .reduce(reduceChange, right)
-
-    merged = changes
-      .filter(change => change.diffType === 'removed')
-      .reduce(reduceChange, merged)
 
     return renderElement(merged, this.props.renderChange)
   }

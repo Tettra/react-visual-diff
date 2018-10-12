@@ -9,39 +9,24 @@ import content1 from './content1'
 import content2 from './content2'
 import { convertToObject } from 'react-json-renderer'
 
-
 const Title = styled.h1`
   margin: .5em;
   border: 1px solid #ccc;
 `
 
 const el = <div>
-  <div>Hello friend</div>
-  <div>
-    <h1>Headline 1</h1>
-  </div>
-  <div>
-    <h1><span>Headline 6</span> What</h1>
-    <h2>Headline 2</h2>
-  </div>
+  <div>Boing</div>
+  <div><span>Hel</span><span>lo</span></div>
+  <div>World</div>
 </div>
 
 const el2 = <div>
-  <div>Goodbye friend</div>
-  <div>
-    <h1>Headline 1</h1>
-  </div>
-  <div>
-    <h1><span>What is going on</span>What 3</h1>
-    <h2>Headline 4</h2>
-  </div>
+  <div><span>World</span></div>
+  <div></div>
+  <div>Boing</div>
 </div>
 
 ReactDOM.render(
   <div>
-    <div style={{ display: 'flex', borderBottom: '2px solid #000' }}>
-      <div>{el}</div>
-      <div>{el2}</div>
-    </div>
     <VisualDiff left={el} right={el2} />
   </div>, document.getElementById('root'))

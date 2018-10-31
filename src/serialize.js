@@ -4,6 +4,7 @@ import isString from 'lodash/isString'
 import pick from 'lodash/pick'
 import flatten from 'lodash/flatten'
 import isFunction from 'lodash/isFunction'
+import ReactIs from "react-is"
 import type {
   React$Node,
   SerializedElement,
@@ -13,13 +14,22 @@ import type {
   TextDiff
 } from './types'
 
-const allowedProps = ['target', 'height', 'width', 'id', 'src', 'children', 'type', 'className', 'style', 'href', 'alt', 'htmlFor']
+const allowedProps = ['dangerouslySetInnerHTML', 'target', 'height', 'width', 'id', 'src', 'children', 'type', 'className', 'style', 'href', 'alt', 'htmlFor']
 
 var i = 0;
 
 const serializeChild = (child) => {
   if (Array.isArray(child)) {
     return serializeChildren(child)
+  } else if (
+    (ReactIs.isContextConsumer(child) || ReactIs.isContextProvider(child)) &&
+    child.props && child.props.children
+  ) {
+    if (isFunction(child.props.children)) {
+      return serializeElement(child.props.children(child.type._currentValue))
+    } else {
+      return serializeChildren(child.props.children)
+    }
   } else if (child != null && !Array.isArray(child) && React.isValidElement(child)) {
     return serializeElement(child)
   } else {

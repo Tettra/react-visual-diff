@@ -6,9 +6,8 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten';
 const jsdiff = require('diff');
 
-import { serializeElement, renderElement } from './diff'
+import { serializeElement, renderElement } from './serialize'
 import diffElement from './diffElement';
-
 const addedBlock = { padding: '0.3em', background: 'green', color: '#fff' }
 const removedBlock = { background: 'red', color: '#fff', padding: '0.3em' }
 const addedInline = { ...addedBlock, display: 'inline-block'}
@@ -99,6 +98,7 @@ export default class ReactVisualDiff extends Component {
   render() {
     const left = serializeElement(this.props.left)
     const right = serializeElement(this.props.right)
+
     const changes = diffElement(left, right)
     .sort((changeA, changeB) => {
       const pathA = filterNumbers(changeA.path)

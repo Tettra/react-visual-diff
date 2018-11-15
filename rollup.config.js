@@ -33,5 +33,5 @@ export default {
     commonjs(),
     cleanup()
   ],
-  external: ['lodash', 'diff', 'deep-diff', 'react', 'jsondiffpatch', 'flatten', 'lodash/pick', 'flatted/esm', 'lodash/get', 'lodash/set', 'lodash/flatten']
+  external: ['lodash', 'diff', 'deep-diff', 'react', 'jsondiffpatch', 'flatten', 'lodash/pick', 'flatted/esm', 'lodash/get', 'lodash/set', 'lodash/flatten', 'react-is']
 }

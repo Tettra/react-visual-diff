@@ -48,8 +48,8 @@ const serializeChildren = (children) => {
 export const serializeElement = (element) => {
   let el = element
 
-  while (el !== null && typeof el.type === 'function') {
-    if (el.type.name === 'Portal') {
+  while (el !== null && isFunction(el.type)) {
+    if (ReactIs.isPortal(el)) {
       el = null;
       break;
     }
@@ -59,6 +59,10 @@ export const serializeElement = (element) => {
     } else {
       el = newEl
     }
+  }
+
+  if (ReactIs.isPortal(el)) {
+    el = null;
   }
 
   if (el == null || el.props == null) {

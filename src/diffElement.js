@@ -53,7 +53,7 @@ const diffChildren = (left, right, changes, leftPath, rightPath) => {
   return changes
 }
 
-const diffProps = ['className', 'src']
+const diffProps = ['className', 'src', 'style']
 
 const makeElementString = (element) => Array.isArray(element) ? stringify(element) : stringify({
   type: element.type,

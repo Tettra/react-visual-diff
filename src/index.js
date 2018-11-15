@@ -18,8 +18,7 @@ const blockElements = ['div', 'hr', 'ul', 'li', 'h1', 'h2', 'h3', 'h4', 'p']
 const renderChange = ({ type, children }) => {
   if (children == null) {
     return null;
-  }
-
+  } 
   if (children != null && blockElements.includes(children.type)) {
     return <div
       style={type === 'added' ? addedBlock : removedBlock}
@@ -67,6 +66,7 @@ const reduceChange = (acc, { path, diffType, value, left, right}) => {
     return set(acc, path, value)
   } else if (diffType === 'removed') {
     const [prevLast, last] = path.slice(-2)
+
     if (prevLast === 'children') {
       const children = get(acc, path.slice(0, -1)) || []
 
@@ -107,6 +107,10 @@ export default class ReactVisualDiff extends Component {
         if (pathA[i] > pathB[i]) {
           return -1;
         } else if (pathA[i] < pathB[i]){
+          return 1;
+        } else if (changeA.diffType === 'added') {
+          return -1;
+        } else if (changeB.diffType === 'added') {
           return 1;
         }
       }

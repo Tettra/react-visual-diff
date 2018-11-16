@@ -4,7 +4,7 @@ import isString from 'lodash/isString'
 import pick from 'lodash/pick'
 import flatten from 'lodash/flatten'
 import isFunction from 'lodash/isFunction'
-import ReactIs from "react-is"
+const ReactIs = require('react-is')
 import type {
   React$Node,
   SerializedElement,
@@ -13,6 +13,8 @@ import type {
   SerializedChildren,
   TextDiff
 } from './types'
+
+console.log('yo', ReactIs)
 
 const allowedProps = ['dangerouslySetInnerHTML', 'target', 'height', 'width', 'id', 'src', 'children', 'type', 'className', 'style', 'href', 'alt', 'htmlFor']
 

@@ -14,8 +14,6 @@ import type {
   TextDiff
 } from './types'
 
-console.log('yo', ReactIs)
-
 const allowedProps = ['dangerouslySetInnerHTML', 'target', 'height', 'width', 'id', 'src', 'children', 'type', 'className', 'style', 'href', 'alt', 'htmlFor']
 
 var i = 0;

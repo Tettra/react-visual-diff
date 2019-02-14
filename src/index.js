@@ -60,7 +60,12 @@ const reduceChange = (acc, { path, diffType, value, left, right}) => {
           }
         }
       } else {
-        return item.value
+        return {
+          type: 'span',
+          props:{
+            children: item.value
+          }
+        }
       }
     })
     return set(acc, path, value)

@@ -15,6 +15,16 @@ const removedInline = { ...removedBlock, display: 'inline-block'}
 
 const blockElements = ['div', 'hr', 'ul', 'li', 'h1', 'h2', 'h3', 'h4', 'p']
 
+const differMap = {
+  'chars': jsdiff.diffChars,
+  'words': jsdiff.diffWords,
+  'wordsWithSpace': jsdiff.diffWordsWithSpace,
+  'lines': jsdiff.diffLines,
+  'trimmedLines': jsdiff.diffTrimmedLines,
+  'sentences': jsdiff.diffSentences
+}
+
+
 const renderChange = ({ type, children }) => {
   if (children == null) {
     return null;
@@ -40,57 +50,59 @@ const transformValue = (val, diffType) => {
   }
 }
 
-const reduceChange = (acc, { path, diffType, value, left, right}) => {
-  if (diffType === 'updated') {
-    value = jsdiff.diffWords(left, right).map(item => {
-      if (item.added === true) {
-        return {
-          type: 'span',
-          diffType: 'added',
-          props:{
-            children: item.value
+const reduceChange = (differ) => {
+  return (acc, {path, diffType, value, left, right}) => {
+    if (diffType === 'updated') {
+      value = differ(left, right).map(item => {
+        if (item.added === true) {
+          return {
+            type: 'span',
+            diffType: 'added',
+            props: {
+              children: item.value
+            }
+          }
+        } else if (item.removed == true) {
+          return {
+            type: 'span',
+            diffType: 'removed',
+            props: {
+              children: item.value
+            }
+          }
+        } else {
+          return {
+            type: 'span',
+            props:{
+              children: item.value
+            }
           }
         }
-      } else if (item.removed == true) {
-        return {
-          type: 'span',
-          diffType: 'removed',
-          props:{
-            children: item.value
-          }
-        }
-      } else {
-        return {
-          type: 'span',
-          props:{
-            children: item.value
-          }
-        }
+      })
+      return set(acc, path, value)
+    } else if (diffType === 'removed') {
+      const [prevLast, last] = path.slice(-2)
+
+      if (prevLast === 'children') {
+        const children = get(acc, path.slice(0, -1)) || []
+
+        return set(
+          acc,
+          path.slice(0, -1),
+          flatten([
+            ...children.slice(0, last),
+            transformValue(value, diffType),
+            ...children.slice(last),
+          ])
+        )
       }
-    })
-    return set(acc, path, value)
-  } else if (diffType === 'removed') {
-    const [prevLast, last] = path.slice(-2)
 
-    if (prevLast === 'children') {
-      const children = get(acc, path.slice(0, -1)) || []
-
-      return set(
-        acc,
-        path.slice(0, -1),
-        flatten([
-          ...children.slice(0, last),
-          transformValue(value, diffType),
-          ...children.slice(last),
-        ])
-      )
+    } else if (diffType === 'added') {
+      return set(acc, path, transformValue(value, diffType))
     }
 
-  } else if (diffType === 'added') {
-    return set(acc, path, transformValue(value, diffType))
+    return acc
   }
-
-  return acc
 }
 
 const filterNumbers = arr => arr.filter(item => typeof item === 'number')
@@ -98,6 +110,7 @@ const filterNumbers = arr => arr.filter(item => typeof item === 'number')
 export default class ReactVisualDiff extends Component {
   static defaultProps = {
     renderChange,
+    differ: 'words'
   }
 
   render() {
@@ -124,7 +137,7 @@ export default class ReactVisualDiff extends Component {
     })
 
     let merged = changes
-      .reduce(reduceChange, right)
+      .reduce(reduceChange(differMap[this.props.differ]), right)
 
     return renderElement(merged, this.props.renderChange)
   }

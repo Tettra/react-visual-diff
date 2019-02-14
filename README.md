@@ -79,7 +79,7 @@ This would only render differences of the children prop.
 | `right` | `React.Element` | required | Pass React.Element or just jsx `right={<MyOtherFancyComponent>}` |
 | `renderChange` | `Component<{ type: 'added' | 'removed', children: React$Children }>` | optional | A react component (can be just a function) that takes two props, `type` is the type of change (`"added"` or `"removed"`), `children` is just the content of the change |
 | `diffProps` | `Array<string>` | optional | An array of prop names that will be diffed. defaults to `['children', 'type', 'className', 'style']` |
-
+| `differ` | `string` | optional | A string mapping to one of the different JsDiff functions to handle the diffing of the two components. Can be any of the following: 'chars'(jsdiff.diffChars), 'words'(jsdiff.diffWords), 'wordsWithSpace'(jsdiff.diffWordsWithSpace), 'lines'(jsdiff.diffLines), 'trimmedLines'(jsdiff.diffTrimmedLines), 'sentences'(jsdiff.diffSentences). Default is 'words'. | 
 ### Roadmap
 
 - An example with draft js documents

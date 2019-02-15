@@ -45,7 +45,9 @@ The `renderChange` prop lets you do this:
   renderChange={({ type, children }) => 
     type === 'added'
     ? <Added>{children}</Added>
-    : <Removed>{children}</Removed>}
+    : type === 'removed' 
+      ?<Removed>{children}</Removed>}
+      : children
   />
 ```
 
@@ -77,7 +79,7 @@ This would only render differences of the children prop.
 | - | - | - | - |
 | `left` | `React.Element` | required | Pass React.Element or just jsx `left={<MyFancyComponent>}` |
 | `right` | `React.Element` | required | Pass React.Element or just jsx `right={<MyOtherFancyComponent>}` |
-| `renderChange` | `Component<{ type: 'added' | 'removed', children: React$Children }>` | optional | A react component (can be just a function) that takes two props, `type` is the type of change (`"added"` or `"removed"`), `children` is just the content of the change |
+| `renderChange` | `Component<{ type: 'added' \| 'removed' \| 'unchanged', children: React$Children }>` | optional | A react component (can be just a function) that takes two props, `type` is the type of change (`"added"`, `"removed"`, or `"unchanged"`), `children` is just the content of the change |
 | `diffProps` | `Array<string>` | optional | An array of prop names that will be diffed. defaults to `['children', 'type', 'className', 'style']` |
 
 ### Roadmap

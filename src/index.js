@@ -18,15 +18,16 @@ const blockElements = ['div', 'hr', 'ul', 'li', 'h1', 'h2', 'h3', 'h4', 'p']
 const renderChange = ({ type, children }) => {
   if (children == null) {
     return null;
-  } 
+  }
+
   if (children != null && blockElements.includes(children.type)) {
     return <div
-      style={type === 'added' ? addedBlock : removedBlock}
+      style={type === 'added' ? addedBlock : type === 'removed' ? removedBlock : {}}
     >{children}</div>;
   }
 
   return <span
-    style={type === 'added' ? addedInline : removedInline}
+    style={type === 'added' ? addedInline : type === 'removed' ? removedInline : {}}
   >{children}</span>;
 };
 
@@ -60,7 +61,13 @@ const reduceChange = (acc, { path, diffType, value, left, right}) => {
           }
         }
       } else {
-        return item.value
+        return {
+          type: 'span',
+          diffType: 'unchanged',
+          props:{
+            children: item.value
+          }
+        }
       }
     })
     return set(acc, path, value)

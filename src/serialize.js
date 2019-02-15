@@ -126,7 +126,7 @@ const renderChild = (child, renderChange) => {
   } else if (Array.isArray(child)) {
     return renderChildren(child, renderChange)
   } else {
-    return child
+    return child;
   }
 }
 

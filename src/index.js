@@ -63,6 +63,7 @@ const reduceChange = (acc, { path, diffType, value, left, right}) => {
       } else {
         return {
           type: 'span',
+          diffType: 'unchanged',
           props:{
             children: item.value
           }

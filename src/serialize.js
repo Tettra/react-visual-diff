@@ -126,13 +126,7 @@ const renderChild = (child, renderChange) => {
   } else if (Array.isArray(child)) {
     return renderChildren(child, renderChange)
   } else {
-    return React.createElement(
-      renderChange,
-      {
-        children: child,
-        key: `key-child-${i++}`
-      }
-    )
+    return child;
   }
 }
 

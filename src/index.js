@@ -71,12 +71,7 @@ const reduceChange = (differ) => {
             }
           }
         } else {
-          return {
-            type: 'span',
-            props:{
-              children: item.value
-            }
-          }
+          return item.value
         }
       })
       return set(acc, path, value)

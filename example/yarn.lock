@@ -1792,8 +1792,8 @@ css-to-react-native@^2.0.3:
     postcss-value-parser "^3.3.0"
 
 css-what@2.1:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/css-what/-/css-what-2.1.0.tgz#9467d032c38cfaefb9f2d79501253062f87fa1bd"
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/css-what/-/css-what-2.1.3.tgz#a6d7604573365fe74686c3f311c56513d88285f2"
 
 cssesc@^0.1.0:
   version "0.1.0"
@@ -1898,10 +1898,6 @@ decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
 decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-
-deep-diff@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/deep-diff/-/deep-diff-1.0.1.tgz#ac437a691e88baf4205b83ae1aa095a13c6c10ac"
 
 deep-equal@^1.0.1:
   version "1.0.1"
@@ -2818,6 +2814,10 @@ flat-cache@^1.2.1:
     del "^2.0.2"
     graceful-fs "^4.1.2"
     write "^0.2.1"
+
+flatted@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/flatted/-/flatted-1.0.3.tgz#18dc8704f89e757d88d7048e9d77b316f91705c2"
 
 flatten@^1.0.2:
   version "1.0.2"
@@ -5579,8 +5579,12 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     strip-json-comments "~2.0.1"
 
 "react-deep-diff@link:..":
-  version "0.0.0"
-  uid ""
+  version "0.4.2"
+  dependencies:
+    diff "^3.5.0"
+    flatted "^1.0.2"
+    lodash "^4.17.10"
+    react-is "^16.6.3"
 
 react-dev-utils@^5.0.1:
   version "5.0.1"
@@ -5621,6 +5625,10 @@ react-error-overlay@^4.0.0:
 react-is@^16.3.1:
   version "16.4.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.2.tgz#84891b56c2b6d9efdee577cc83501dfc5ecead88"
+
+react-is@^16.6.3:
+  version "16.13.1"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
 
 react-json-renderer@^0.6.0:
   version "0.6.0"

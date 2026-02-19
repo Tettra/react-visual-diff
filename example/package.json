@@ -5,7 +5,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "diff": "^3.5.0",
+    "diff": "^3.5.1",
     "fast-diff": "^1.1.2",
     "medium-draft": "^0.5.6",
     "prop-types": "^15.6.1",
@@ -21,5 +21,15 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "resolutions": {
+    "pbkdf2": "3.1.3",
+    "semver": "5.7.2",
+    "url-parse": "1.5.9",
+    "diff": "3.5.1",
+    "tar": "7.5.7",
+    "lodash": "4.17.23",
+    "qs": "6.14.1",
+    "node-forge": "1.3.2"
   }
 }
